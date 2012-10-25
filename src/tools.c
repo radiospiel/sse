@@ -72,12 +72,31 @@ static void free_sse_environment()
 
 static char* run_command(const char* data, char** command, char** environment);
 
+void log_sse_event(char** headers, const char* data)
+{
+  char* event_id = 0;
+  char* event_type = 0;
+  char** p;
+  for(p = headers; (!event_id || !event_type) && *p; ++p) {
+    if(strncmp(*p, "ID=", 3) == 0)
+      event_id = *p + 3;
+    else if(strncmp(*p, "TYPE=", 5) == 0)
+      event_type = *p + 5;
+  }
+
+  fprintf(stderr, "EVENT %s:%s (%d byte)\n", event_type ? event_type : "event", 
+                      event_id ? event_id : "<none>", (int) strlen(data));
+}
+
 void on_sse_event(char** headers, const char* data, const char* reply_url)
 {
+  log_sse_event(headers, data);
+  
   char* result = 0;
   
   if(options.command) {
     build_sse_environment(headers);
+    
     result = run_command(data, options.command, sse_environment);
     free_sse_environment();
   }
@@ -94,6 +113,7 @@ void on_sse_event(char** headers, const char* data, const char* reply_url)
       NULL
     };
 
+    fprintf(stderr, "REPLY %s (%d byte)\n", reply_url, (int) strlen(body));
     http(HTTP_POST, reply_url, reply_headers, body, strlen(body), http_ignore_data, 0);
   }
 

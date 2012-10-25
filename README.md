@@ -38,6 +38,7 @@ If you need to use CA files different from the system default, use the `-a` and 
 - When evaluating an event stream `sse` does not decode anything as UTF-8, and does not do any error checking on this.
 - `sse` does not deal with LF characters in its input.
 - `sse` does not ignore any field names (There is a compile time limit on possible fields, though.)
+- `sse` ignores lines without a colon, instead of setting a event field with no value
 - `sse` resets the "id" between events
 - `sse` does not evaluate "retry" fields
 

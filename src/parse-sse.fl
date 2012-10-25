@@ -138,9 +138,14 @@ reply:.*          set_reply_url(yytext + 6);
 [-_0-9a-z]+:\ .*  header_add_from_line(yytext);
 [-_0-9a-z]+:.*    header_add_from_line(yytext);
 
-.*                flush();
+                  /* ignore lines starting with a colon. */
+:.*               ;
+
+                  /* ignore lines without colon IN VIOLATION WITH THE SPECS. */
+.+                ;
+
 \n\n              flush();
-\n                /* no yet flushing - this could be within an event */
+\n                /* no yet flushing - this is within an event */
 
 %%
 

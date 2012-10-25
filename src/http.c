@@ -158,6 +158,11 @@ static CURL* curl_handle() {
   return curl;
 }
 
+size_t http_ignore_data(char *ptr, size_t size, size_t nmemb, void *userdata)
+{ 
+  return size * nmemb; 
+}
+
 extern void http(int  verb,
   const char*   url, 
   const char**  http_headers, 
@@ -208,10 +213,9 @@ extern void http(int  verb,
   
   // -- set write function --------------------------------------------
   
-  if(on_data) {
+  if(on_data)
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, on_data);
-  }
-
+  
   // -- perform -------------------------------------------------------
   
   curl_perform(curl);         /* Perform the request */ 

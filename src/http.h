@@ -31,4 +31,6 @@ extern void http(int  verb,
 
 extern char curl_error_buf[];
 
+extern size_t http_ignore_data(char *ptr, size_t size, size_t nmemb, void *userdata);
+
 #endif

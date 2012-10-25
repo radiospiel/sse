@@ -94,7 +94,7 @@ void on_sse_event(char** headers, const char* data, const char* reply_url)
       NULL
     };
 
-    http(HTTP_POST, reply_url, reply_headers, body, strlen(body), 0, 0);
+    http(HTTP_POST, reply_url, reply_headers, body, strlen(body), http_ignore_data, 0);
   }
 
   free(result);

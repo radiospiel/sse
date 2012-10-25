@@ -24,23 +24,25 @@ The event's `data` attribute is written to the command's standard input. All oth
 
 If a SSE "reply" attribute is set, sse also posts the command's result to the URL specified there.
 
-### `sse` security
+### sse security
 
 By default, `sse` only accepts HTTPS connections. It verifies the complete certificate chain and the host name. To run
-against HTTP and insecure HTTPS connections use the "-i" parameter. 
+against HTTP and insecure HTTPS connections use the `-i` parameter. 
 
 If you need to use CA files different from the system default, use the `-a` and `-c` options. 
+
+When `sse` starts a subcommand, it limits the subcommand's output to ~120 kByte. This should limit sse's potential memory usage; however, you should use softlimit (http://cr.yp.to/daemontools/softlimit.html) or a similar tool to limit resource usage for `sse` and its child processes.
 
 ### Issues and limitations.
 
 `sse` violates the eventsource specifications in a number of ways. They
 
-- When evaluating an event stream `sse` does not decode anything as UTF-8, and does not do any error checking on this.
-- `sse` does not deal with LF characters in its input.
-- `sse` does not ignore any field names (There is a compile time limit on possible fields, though.)
-- `sse` ignores lines without a colon, instead of setting a event field with no value
-- `sse` resets the "id" between events
-- `sse` does not evaluate "retry" fields
+- When evaluating an event stream *sse* does not decode anything as UTF-8, and does not do any error checking on this.
+- *sse* does not deal with LF characters in its input.
+- *sse* does not ignore any field names (There is a compile time limit on possible fields, though.)
+- *sse* ignores lines without a colon, instead of setting a event field with no value
+- *sse* resets the "id" between events
+- *sse* does not evaluate "retry" fields
 
 In addition, if an event has a "reply" field, and that field contains an URL, `sse` sends the result of the command execution via HTTP(S) POST to that URL.
 

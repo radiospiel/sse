@@ -53,6 +53,13 @@ int main(int argc, char** argv)
 
   if(!options.url) usage();
 
+  if(!options.allow_insecure) {
+    if(strncmp(options.url, "https:", 6)) {
+      fprintf(stderr, "Insecure connections not allowed, use -i, if necessary.\n");
+      exit(1);
+    }
+  } 
+
   /* === read data from stdin, if needed =========================== */
   
   char* buf = 0;

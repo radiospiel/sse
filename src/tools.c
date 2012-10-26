@@ -273,3 +273,32 @@ void logger(int verbosity, const char* data, unsigned len, const char* sep)
   }
 }
 
+/*
+ * string ends equal: returns pattern in string ends in pattern,
+ * returns NULL otherwise.
+ */
+const char* streeq(const char* string, const char* pattern) {
+  if(!*pattern || !*pattern) return string;
+  if(!string || !*string) return NULL;
+  
+  size_t string_len = strlen(string);
+  size_t pattern_len = strlen(pattern);
+  if(string_len < pattern_len) return NULL;
+
+  string += string_len - pattern_len;
+  return strcmp(string, pattern) == 0 ? string : NULL;
+}
+
+/*
+ * string starts equal: returns string after pattern if string starts
+ * in pattern,
+ * returns NULL otherwise.
+ */
+const char* strseq(const char* string, const char* pattern) {
+  if(!*pattern || !*pattern) return string;
+  if(!string || !*string) return NULL;
+  
+  size_t pattern_len = strlen(pattern);
+
+  return strncmp(string, pattern, pattern_len) == 0 ? string + pattern_len : NULL;
+}

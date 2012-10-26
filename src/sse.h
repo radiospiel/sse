@@ -89,4 +89,17 @@ extern void _die(const char* msg);
  */
 extern void logger(int verbosity, const char* data, unsigned len, const char* sep);
 
+/*
+ * string ends equal: returns pattern in string ends in pattern,
+ * returns NULL otherwise.
+ */
+extern const char* streeq(const char* string, const char* pattern);
+
+/*
+ * string starts equal: returns string after pattern if string starts
+ * in pattern,
+ * returns NULL otherwise.
+ */
+extern const char* strseq(const char* string, const char* pattern);
+
 #endif

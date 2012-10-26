@@ -12,17 +12,13 @@
 
 #include "sse.h"
 
-DEFINE_OBJECT(Options, options);
-
 static void usage();
 
-int main(int argc, char** argv) 
+int post_main(int argc, char** argv) 
 {
   char *data = NULL;
 
   /* === parse arguments =========================================== */
-
-  options.arg0 = *argv;
 
   while(1) {
     int ch = getopt(argc, argv, "vic:a:?h");

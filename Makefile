@@ -43,25 +43,22 @@ tmp:
 	mkdir tmp
 
 post: bin bin/post
-ifeq ($(RELEASE),1)
-	strip bin/post
-endif
-	
+
 sse:  bin bin/sse
-ifeq ($(RELEASE),1)
-	strip bin/sse
-endif
 
 clean: 
 	rm -rf bin/*
 
 # --- binaries --------------------------------------------------------
 
-bin/post: src/post.c src/tools.c src/http.c src/tools.c
-	gcc $(CFLAGS) -o $@ $^ $(LFLAGS)
+bin/post: bin/sse
+	$(shell cd bin; ln -sf sse post)
 
-bin/sse: src/sse.c src/tools.c src/http.c src/parse-sse.c
+bin/sse: src/main.c src/post.c src/sse.c src/tools.c src/http.c src/parse-sse.c
 	gcc $(CFLAGS) -o $@ $^ $(LFLAGS)
+ifeq ($(RELEASE),1)
+	strip bin/sse
+endif
 
 src/parse-sse.c: src/parse-sse.fl
 	flex -I -o $@ $<

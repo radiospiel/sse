@@ -39,7 +39,7 @@ static const char* verify_sse_response(CURL* curl) {
   return "Invalid content_type, should be '" EXPECTED_CONTENT_TYPE "'.";
 }
 
-int main(int argc, char** argv) 
+int sse_main(int argc, char** argv) 
 {
   parse_arguments(argc, argv);
 
@@ -53,8 +53,6 @@ int main(int argc, char** argv)
   http(HTTP_GET, options.url, headers, 0, 0, on_data, verify_sse_response);
   return 0;
 }
-
-DEFINE_OBJECT(Options, options);
 
 static char* help[] = {
   "",
@@ -90,8 +88,6 @@ static void usage() {
 
 static void parse_arguments(int argc, char** argv)
 {
-  options.arg0 = *argv;
-
   while(1) {
     int ch = getopt(argc, argv, "vic:a:l:?h");
     if(ch == -1) break;

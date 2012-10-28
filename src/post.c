@@ -12,8 +12,6 @@
 
 #include "sse.h"
 
-DEFINE_OBJECT(Options, options);
-
 static void usage();
 
 static size_t http_write_data(char *ptr, size_t size, size_t nmemb, void *userdata) {
@@ -21,13 +19,11 @@ static size_t http_write_data(char *ptr, size_t size, size_t nmemb, void *userda
   return size * nmemb;
 }
 
-int main(int argc, char** argv) 
+int post_main(int argc, char** argv) 
 {
   char *data = NULL;
 
   /* === parse arguments =========================================== */
-
-  options.arg0 = *argv;
 
   while(1) {
     int ch = getopt(argc, argv, "vic:a:?h");

@@ -97,17 +97,25 @@ char curl_error_buf[CURL_ERROR_SIZE];
  *
  * THIS ALSO MEANS THAT THIS CODE IS NOT THREADSAFE, and propably NOT REENTRANT.
  */
-static CURL* curl_handle() {
+#define MAX_HANDLES 10
+
+static CURL* curl_handle(int index) {
   static int curl_initialised = 0;
+  static CURL *curl_handles[MAX_HANDLES];
+
   if(!curl_initialised) {
     curl_initialised = 1;
+    memset(curl_handles, 0, sizeof(curl_handles));
     curl_global_init(CURL_GLOBAL_ALL);  /* In windows, this will init the winsock stuff */ 
     atexit(curl_global_cleanup);
   }
 
-  CURL *curl = curl_easy_init();
-  if(!curl)
-    die("curl");
+  CURL* curl = curl_handles[index];
+  if(!curl) {
+    curl = curl_handles[index] = curl_easy_init();
+    if(!curl)
+      die("curl");
+  }
 
   /* === verbosity? ================================================ */
 
@@ -163,7 +171,7 @@ size_t http_ignore_data(char *ptr, size_t size, size_t nmemb, void *userdata)
   return size * nmemb; 
 }
 
-extern void http(int  verb,
+extern void http(int verb,
   const char*   url, 
   const char**  http_headers, 
   
@@ -174,7 +182,7 @@ extern void http(int  verb,
   const char*   (*on_verify)(CURL* curl)
 )
 {
-  CURL *curl = curl_handle();
+  CURL *curl = curl_handle(verb);
 
   // -- set URL -------------------------------------------------------
   

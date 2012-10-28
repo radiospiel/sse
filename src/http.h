@@ -15,8 +15,8 @@
  * send HTTP request.
  */
 
-#define HTTP_GET  1
-#define HTTP_POST 2
+#define HTTP_GET  0
+#define HTTP_POST 1
 
 extern void http(int  verb,
   const char*   url, 

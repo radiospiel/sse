@@ -16,6 +16,11 @@ DEFINE_OBJECT(Options, options);
 
 static void usage();
 
+static size_t http_write_data(char *ptr, size_t size, size_t nmemb, void *userdata) {
+  write_all(FD_STDOUT, ptr, size * nmemb);
+  return size * nmemb;
+}
+
 int main(int argc, char** argv) 
 {
   char *data = NULL;
@@ -88,7 +93,7 @@ int main(int argc, char** argv)
     NULL
   };
 
-  http(HTTP_POST, options.url, headers, data, dataLength, 0, 0);
+  http(HTTP_POST, options.url, headers, data, dataLength, http_write_data, 0);
 
   if(buf) free(buf);
   

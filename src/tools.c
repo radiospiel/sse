@@ -7,7 +7,7 @@
 #include "sse.h"
 #include "http.h"
 
-#ifdef __APPLE__ && __MACH__
+#if defined(__APPLE__) && defined(__MACH__)
 
 extern char **environ;
 static int execvpe(const char *program, char **argv, char **envp)
